@@ -1,7 +1,7 @@
-build/
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
+flutter_app/build/
+flutter_app/.dart_tool/
+flutter_app/.flutter-plugins
+flutter_app/.flutter-plugins-dependencies
+flutter_app/.packages
 *.apk
 *.aab
