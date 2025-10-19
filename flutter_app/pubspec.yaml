@@ -1,0 +1,59 @@
+name: lexia
+description: Flutter app with TensorFlow API integration for image classification
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+  flutter: ">=3.13.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP requests
+  http: ^1.1.0
+  
+  # Image picking
+  image_picker: ^1.0.4
+  
+  # File system
+  path_provider: ^2.1.1
+  
+  # Permissions
+  permission_handler: ^11.0.1
+  
+  # State management (opcional)
+  provider: ^6.0.5
+  
+  # UI helpers
+  cached_network_image: ^3.3.0
+  
+  # Icons
+  cupertino_icons: ^1.0.2
+  video_player: ^2.8.2
+  flutter_tts: ^3.8.0
+  speech_to_text: ^7.0.0
+  google_fonts: ^6.1.0
+  google_mlkit_translation: ^0.11.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icons/icono.png
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/icons/icono.png
+  min_sdk_android: 21
