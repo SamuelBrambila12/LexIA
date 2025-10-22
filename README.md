@@ -74,7 +74,7 @@ Whether you're a self-learner or part of a formal education program, LexIA addre
 ### Download the APK
 Get the latest version directly:
 
-**[Download LexIA APK](https://www.mediafire.com/file/ski3r6w36pxwhxy/LexIA.apk/file)**
+**[Download LexIA APK](https://www.mediafire.com/file/079m5dpmxn9zgo1/LexIA.apk/file)**
 
 ### Requirements
 - Android 7.0 or higher (Android version)
