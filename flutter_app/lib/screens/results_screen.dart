@@ -117,124 +117,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
     'whistle': 'silbato',
   };
 
-  // Palabras clave prohibidas para moderación básica
-  static const List<String> _prohibitedKeywords = [
-    // Inglés
-    'adult', 'porn', 'porno', 'pornography', 'sexual', 'sex', 'nude', 'nudity', 'genitals', 'breast', 'breasts', 'boobs', 'nipples',
-    'butt', 'buttocks', 'ass', 'penis', 'vagina', 'orgy', 'xxx', 'erotic', 'fetish', 'bdsm', 'hardcore', 'nsfw',
-    'gore', 'blood', 'bloody', 'decapitation', 'decapitated', 'dismember', 'dismembered', 'guts', 'intestine', 'violent', 'violence', 'murder', 'dead body', 'corpse',
-    // Español
-    'adulto', 'pornografia', 'pornografía', 'sexual', 'sexo', 'desnudo', 'desnudos', 'desnudez', 'genitales', 'pechos', 'senos', 'pezones',
-    'trasero', 'nalgas', 'culo', 'pene', 'vagina', 'orgia', 'orgía', 'erotico', 'erótico', 'fetiche', 'bdsm',
-    'gore', 'sangre', 'sangriento', 'decapitado', 'desmembrado', 'tripas', 'intestinos', 'violento', 'violencia', 'asesinato', 'cadaver', 'cadáver'
-  ];
-
-  Future<bool> _isProhibitedAsync() async {
-    // Revisa palabras prohibidas en inglés y en español traduciendo cada predicción
-    for (final p in _sortedPredictions) {
-      final en = _normalizeKey(p.className);
-      // Check inglés
-      for (final k in _prohibitedKeywords) {
-        if (en.contains(k)) return true;
-      }
-      // Traducir y checar en español
-      try {
-        final t = await ApiService.translateToSpanish(p.className);
-        final es = _normalizeKey(t);
-        for (final k in _prohibitedKeywords) {
-          if (es.contains(k)) return true;
-        }
-      } catch (_) {}
-    }
-    return false;
-  }
-
-  Future<void> _handleProhibitedContent(BuildContext context) async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: AppDimensions.dialogElevation,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [AppColors.errorDark, AppColors.errorLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(color: Colors.white24, shape: BoxShape.circle),
-                      padding: const EdgeInsets.all(10),
-                      child: const Icon(Icons.warning_rounded, color: Colors.white, size: 28),
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text(
-                        'Uso prohibido',
-                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Queda prohibido el uso de la aplicación para material para adultos, gore u otros fines indebidos.',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Se omitirá la traducción y la imagen será descartada para evitar malos usos.',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.errorDark,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: const Text('Entendido'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
-    if (!mounted) return;
-    Navigator.of(context).pop({'clearImage': true});
-  }
-
+  
+  
+  
   String _normalizeKey(String s) => s.trim().toLowerCase().replaceAll('_', ' ').replaceAll('-', ' ');
 
   String _toSpanishName(String english) {
@@ -391,11 +276,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
       return;
     }
 
-    // Moderación: bloquear si hay contenido prohibido
-    if (await _isProhibitedAsync()) {
-      await _handleProhibitedContent(context);
-      return;
-    }
+    // Moderación deshabilitada: no bloquear por contenido
 
     int idx = 0;
     while (idx < _sortedPredictions.length && mounted) {

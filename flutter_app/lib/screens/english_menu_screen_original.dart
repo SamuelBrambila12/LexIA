@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../utils/constants.dart';
 import 'home_screen.dart';
@@ -7,9 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import 'dart:async';
 import 'typing_shooter_screen.dart';
-import '../services/auth_service.dart';
-import '../services/user_stats_service.dart';
-import 'auth/login_register_screen.dart';
 
 class EnglishMenuScreen extends StatelessWidget {
   const EnglishMenuScreen({super.key});
@@ -18,9 +15,9 @@ class EnglishMenuScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('$title - En construcción'),
+        title: Text('$title - En construcci├│n'),
         content: const Text(
-          'Esta sección está en desarrollo. Pronto podrás practicar con ejercicios interactivos.',
+          'Esta secci├│n est├í en desarrollo. Pronto podr├ís practicar con ejercicios interactivos.',
         ),
         actions: [
           TextButton(
@@ -47,7 +44,7 @@ class EnglishMenuScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inglés'),
+        title: const Text('Ingl├®s'),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle_outlined),
@@ -83,7 +80,7 @@ class EnglishMenuScreen extends StatelessWidget {
                     radius: 28,
                     backgroundColor: Colors.white,
                     child: Text(
-                      '🇬🇧',
+                      '­ƒç¼­ƒçº',
                       style: TextStyle(fontSize: 28),
                     ),
                   ),
@@ -93,7 +90,7 @@ class EnglishMenuScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Menú de aprendizaje',
+                          'Men├║ de aprendizaje',
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -101,7 +98,7 @@ class EnglishMenuScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Elige una categoría para empezar a practicar',
+                          'Elige una categor├¡a para empezar a practicar',
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
@@ -124,7 +121,7 @@ class EnglishMenuScreen extends StatelessWidget {
               delegate: SliverChildListDelegate([
                 _MenuCard(
                   title: 'Ejercicios gramaticales',
-                  subtitle: 'Práctica de tiempos verbales, artículos y más',
+                  subtitle: 'Pr├íctica de tiempos verbales, art├¡culos y m├ís',
                   icon: Icons.menu_book_rounded,
                   color: Colors.deepPurple,
                   onTap: () {
@@ -136,7 +133,7 @@ class EnglishMenuScreen extends StatelessWidget {
                   },
                 ),
                 _MenuCard(
-                  title: 'Ejercicios de pronunciación',
+                  title: 'Ejercicios de pronunciaci├│n',
                   subtitle: 'Escucha y repite para mejorar tu acento',
                   icon: Icons.record_voice_over_rounded,
                   color: Colors.teal,
@@ -149,8 +146,8 @@ class EnglishMenuScreen extends StatelessWidget {
                   },
                 ),
                 _MenuCard(
-                  title: 'Traducción de objetos',
-                  subtitle: 'Usa la cámara para identificar y traducir objetos',
+                  title: 'Traducci├│n de objetos',
+                  subtitle: 'Usa la c├ímara para identificar y traducir objetos',
                   icon: Icons.camera_alt_rounded,
                   color: Colors.orange,
                   onTap: () {
@@ -171,72 +168,11 @@ class EnglishMenuScreen extends StatelessWidget {
   }
 }
 
-class _UserProfileSheet extends StatefulWidget {
+class _UserProfileSheet extends StatelessWidget {
   const _UserProfileSheet({super.key});
 
   @override
-  State<_UserProfileSheet> createState() => _UserProfileSheetState();
-}
-
-class _UserProfileSheetState extends State<_UserProfileSheet> {
-  Map<String, String>? _user;
-  double _progress = 0.0;
-  int _streak = 0;
-  int _lessons = 0;
-  int _points = 0;
-  String _level = 'A1';
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final us = await AuthService().currentUser();
-    if (us != null) {
-      final stats = await UserStatsService().getStats(us['email']!);
-      if (!mounted) return;
-      setState(() {
-        _user = us;
-        _progress = stats.progress;
-        _streak = stats.streakDays;
-        _lessons = stats.lessons;
-        _points = stats.points;
-        _level = stats.level;
-        _loading = false;
-      });
-    } else {
-      if (!mounted) return;
-      setState(() {
-        _loading = false;
-      });
-    }
-  }
-
-  Future<void> _logout(BuildContext context) async {
-    await AuthService().signOut();
-    if (!mounted) return;
-    Navigator.of(context).pop();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LoginRegisterScreen()),
-      (route) => false,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const SizedBox(
-        height: 260,
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    final name = _user?['name'] ?? 'Invitado';
-    final nextLevel = _level == 'A1' ? 'A2' : (_level == 'A2' ? 'B1' : (_level == 'B1' ? 'B2' : 'C1'));
-
     return FractionallySizedBox(
       heightFactor: 0.86,
       child: Container(
@@ -295,16 +231,16 @@ class _UserProfileSheetState extends State<_UserProfileSheet> {
                                 const SizedBox(width: 12),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: const [
                                     Text(
-                                      name,
-                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                      'Samuel Brambila',
+                                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                                     ),
-                                    const SizedBox(height: 6),
+                                    SizedBox(height: 6),
                                     Chip(
-                                      label: Text('Nivel de inglés: $_level', style: const TextStyle(color: Colors.white)),
+                                      label: Text('Nivel de ingl├®s: B1', style: TextStyle(color: Colors.white)),
                                       backgroundColor: Colors.black26,
-                                      side: const BorderSide(color: Colors.white24),
+                                      side: BorderSide(color: Colors.white24),
                                     ),
                                   ],
                                 ),
@@ -323,12 +259,12 @@ class _UserProfileSheetState extends State<_UserProfileSheet> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      Text('Progreso hacia $nextLevel', style: const TextStyle(fontWeight: FontWeight.w700)),
+                      const Text('Progreso hacia B2', style: TextStyle(fontWeight: FontWeight.w700)),
                       const SizedBox(height: 8),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: LinearProgressIndicator(
-                          value: _progress,
+                          value: 0.62,
                           minHeight: 14,
                           backgroundColor: const Color(0xFFEAEFF3),
                           valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
@@ -337,37 +273,42 @@ class _UserProfileSheetState extends State<_UserProfileSheet> {
                       const SizedBox(height: 6),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${(_progress * 100).toStringAsFixed(0)}% completado', style: const TextStyle(color: Colors.black54)),
-                          Text('Meta: $nextLevel', style: const TextStyle(color: Colors.black54)),
+                        children: const [
+                          Text('62% completado', style: TextStyle(color: Colors.black54)),
+                          Text('Meta: B2', style: TextStyle(color: Colors.black54)),
                         ],
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        children: [
-                          _StatCard(icon: Icons.local_fire_department_rounded, color: Colors.deepOrange, label: 'Racha', value: '$_streak días'),
-                          const SizedBox(width: 12),
-                          _StatCard(icon: Icons.check_circle_rounded, color: Colors.green, label: 'Lecciones', value: '$_lessons'),
-                          const SizedBox(width: 12),
-                          _StatCard(icon: Icons.star_rounded, color: Colors.amber, label: 'Puntos', value: '$_points'),
+                        children: const [
+                          _StatCard(icon: Icons.local_fire_department_rounded, color: Colors.deepOrange, label: 'Racha', value: '7 d├¡as'),
+                          SizedBox(width: 12),
+                          _StatCard(icon: Icons.check_circle_rounded, color: Colors.green, label: 'Lecciones', value: '24'),
+                          SizedBox(width: 12),
+                          _StatCard(icon: Icons.star_rounded, color: Colors.amber, label: 'Puntos', value: '1,240'),
                         ],
                       ),
                       const SizedBox(height: 24),
                       FilledButton.icon(
-                        onPressed: () => _logout(context),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Sesi├│n cerrada (demo)')),
+                          );
+                          Navigator.of(context).pop();
+                        },
                         style: FilledButton.styleFrom(
                           backgroundColor: Colors.redAccent,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         icon: const Icon(Icons.logout_rounded),
-                        label: const Text('Cerrar sesión'),
+                        label: const Text('Cerrar sesi├│n'),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Función de ejemplo')),
+                            const SnackBar(content: Text('Funci├│n de ejemplo')),
                           );
                         },
                         icon: const Icon(Icons.emoji_events_rounded),
@@ -563,10 +504,9 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
   // Estado para minijuego: memorama
   List<String> _memLabels = [];
   List<int> _memPairIds = [];
-  Set<int> _memMatchedCards = <int>{}; // Índices de cartas emparejadas
+  Set<int> _memMatched = <int>{};
   List<int> _memRevealed = [];
   int _memExerciseIndex = -1;
-  int _memRoundId = 0; // Para invalidar callbacks atrasados
 
   // Estado para minijuego: ahorcado
   Set<String> _hangGuessed = <String>{};
@@ -625,7 +565,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       final verb = verbs[rnd.nextInt(verbs.length)];
       final adv = timeAdverbs[rnd.nextInt(timeAdverbs.length)];
 
-      // Elegir tiempo verbal según adverbio
+      // Elegir tiempo verbal seg├║n adverbio
       String prompt = '';
       String correct = '';
       final List<String> opts = [];
@@ -660,7 +600,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         prompt: prompt,
         options: shuffled,
         answer: correct,
-        explanation: 'Selecciona la forma correcta del verbo según el contexto temporal.',
+        explanation: 'Selecciona la forma correcta del verbo seg├║n el contexto temporal.',
         category: 'Tiempos Verbales',
       ));
     }
@@ -697,7 +637,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         prompt: s['text'] as String,
         options: const ['True', 'False'],
         answer: s['answer'] as bool,
-        explanation: (s['fix'] as String).isEmpty ? null : 'Corrección: ${s['fix']}',
+        explanation: (s['fix'] as String).isEmpty ? null : 'Correcci├│n: ${s['fix']}',
         category: 'Verdadero/Falso',
       ));
     }
@@ -723,7 +663,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       final shuffled = List<String>.from(tokens)..shuffle(rnd);
       order.add(GrammarExercise(
         type: GrammarType.orderWords,
-        prompt: 'Ordena las palabras para formar la oración correcta:',
+        prompt: 'Ordena las palabras para formar la oraci├│n correcta:',
         options: shuffled,
         answer: tokens, // lista en orden
         explanation: 'Frase correcta: $t',
@@ -731,7 +671,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       ));
     }
 
-    // 4) Minijuego: Reventar globos (selecciona la opción correcta)
+    // 4) Minijuego: Reventar globos (selecciona la opci├│n correcta)
     final List<GrammarExercise> balloon = [];
     for (int i = 0; i < 15; i++) {
       final subj = subjects[rnd.nextInt(subjects.length)];
@@ -765,12 +705,12 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         prompt: prompt,
         options: shuffled,
         answer: correct,
-        explanation: 'Toca el globo con la opción correcta.',
+        explanation: 'Toca el globo con la opci├│n correcta.',
         category: 'Minijuego: Globos',
       ));
     }
 
-    // 4b) Minijuego: Duck Hunt (toca el pato con la opción correcta)
+    // 4b) Minijuego: Duck Hunt (toca el pato con la opci├│n correcta)
     final List<GrammarExercise> duckHunt = [];
     for (int i = 0; i < 15; i++) {
       final subj = subjects[rnd.nextInt(subjects.length)];
@@ -804,12 +744,12 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         prompt: prompt,
         options: shuffled,
         answer: correct,
-        explanation: 'Dispara al pato con la opción correcta.',
+        explanation: 'Dispara al pato con la opci├│n correcta.',
         category: 'Minijuego: Duck Hunt',
       ));
     }
 
-    // 4c) Minijuego: Typing Shooter (zty.pe-like) - más frecuente (5 rondas)
+    // 4c) Minijuego: Typing Shooter (zty.pe-like) - m├ís frecuente (5 rondas)
     final List<GrammarExercise> typingShooter = List.generate(5, (i) => GrammarExercise(
       type: GrammarType.typingShooter,
       prompt: 'Typing Shooter: escribe las palabras para destruir las naves (Ronda ${i + 1})',
@@ -819,91 +759,55 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       category: 'Minijuego: Typing Shooter',
     ));
 
-    // 5) Minijuego: Memorama (pares únicos de múltiples categorías)
+    // 5) Minijuego: Memorama (empareja sujeto con "to be")
     final List<GrammarExercise> memory = [];
-    // Pool de categorías (pares únicos)
-    final memoryPools = <Map<String, String>>[
-      // País ↔ Gentilicio
-      {'Mexico': 'Mexican', 'Spain': 'Spanish', 'Japan': 'Japanese', 'Brazil': 'Brazilian', 'France': 'French', 'Germany': 'German'},
-      // Color ↔ Español
-      {'Red': 'Rojo', 'Blue': 'Azul', 'Green': 'Verde', 'Yellow': 'Amarillo', 'Black': 'Negro', 'White': 'Blanco'},
-      // Animal ↔ Español
-      {'Dog': 'Perro', 'Cat': 'Gato', 'Bird': 'Pájaro', 'Fish': 'Pez', 'Horse': 'Caballo', 'Cow': 'Vaca'},
-      // Profesión ↔ Español
-      {'Teacher': 'Maestro', 'Doctor': 'Doctor', 'Engineer': 'Ingeniero', 'Nurse': 'Enfermero', 'Lawyer': 'Abogado'},
-      // Antónimos
-      {'Big': 'Small', 'Hot': 'Cold', 'Fast': 'Slow', 'Happy': 'Sad', 'Tall': 'Short', 'Early': 'Late'},
-      // Verbo ↔ Pasado
-      {'Go': 'Went', 'Eat': 'Ate', 'See': 'Saw', 'Make': 'Made', 'Have': 'Had', 'Write': 'Wrote'},
-      // Verbo ↔ 3a persona
-      {'Go': 'Goes', 'Study': 'Studies', 'Have': 'Has', 'Do': 'Does', 'Watch': 'Watches'},
-      // Preposición ↔ Uso
-      {'On': 'Surface', 'In': 'Inside', 'At': 'Point', 'Under': 'Below', 'Between': 'Middle'},
+    final toBePairs = const [
+      {'s': 'I', 'b': 'am'},
+      {'s': 'You', 'b': 'are'},
+      {'s': 'He', 'b': 'is'},
+      {'s': 'She', 'b': 'is'},
+      {'s': 'We', 'b': 'are'},
+      {'s': 'They', 'b': 'are'},
     ];
-
-    // Generar muchos ejercicios de memorama mezclando categorías
-    for (int i = 0; i < 30; i++) {
-      // 1 de cada ~5 usa to be determinista para reforzar base
-      if (i % 5 == 0) {
-        final heOrShe = rnd.nextBool() ? 'He' : 'She';
-        final pairs = <String, String>{'I': 'am', 'You': 'are', heOrShe: 'is'};
-        memory.add(GrammarExercise(
-          type: GrammarType.memoryPairs,
-          prompt: 'Memorama: empareja pronombre y verbo "to be"',
-          options: const [],
-          answer: pairs,
-          explanation: 'Voltea dos cartas para formar un par correcto.',
-          category: 'Minijuego: Memorama',
-        ));
-        continue;
+    for (int i = 0; i < 15; i++) {
+      final pairs = <String, String>{};
+      final sample = List<Map<String, String>>.from(toBePairs)..shuffle(rnd);
+      for (int k = 0; k < 3; k++) {
+        pairs[sample[k]['s']!] = sample[k]['b']!;
       }
-      // Elegir categoría aleatoria del pool
-      final pool = Map<String, String>.from(memoryPools[rnd.nextInt(memoryPools.length)]);
-      final keys = pool.keys.toList()..shuffle(rnd);
-      // Tomar 3 pares únicos
-      final picked = <String, String>{};
-      for (int k = 0; k < keys.length && picked.length < 3; k++) {
-        final k0 = keys[k];
-        final v0 = pool[k0]!;
-        if (!picked.containsKey(k0) && !picked.containsValue(v0)) {
-          picked[k0] = v0;
-        }
-      }
-      if (picked.length == 3) {
-        memory.add(GrammarExercise(
-          type: GrammarType.memoryPairs,
-          prompt: 'Memorama: empareja los conceptos relacionados',
-          options: const [],
-          answer: picked,
-          explanation: 'Encuentra los 3 pares correspondientes.',
-          category: 'Minijuego: Memorama',
-        ));
-      }
+      memory.add(GrammarExercise(
+        type: GrammarType.memoryPairs,
+        prompt: 'Memorama: empareja el sujeto con la forma correcta del verbo "to be"',
+        options: const [],
+        answer: pairs,
+        explanation: 'Voltea dos cartas para formar un par correcto.',
+        category: 'Minijuego: Memorama',
+      ));
     }
 
     // 6) Minijuego: Ahorcado (adivina la palabra letra por letra)
     final List<GrammarExercise> hangman = [];
     final hangmanPool = <Map<String, String>>[
-      {'word': 'ADJECTIVE', 'clue': 'Palabra que describe a un sustantivo (en inglés).'},
-      {'word': 'VERB', 'clue': 'Palabra que expresa una acción (en inglés).'},
-      {'word': 'PRONOUN', 'clue': 'Palabra que reemplaza a un sustantivo (en inglés).'},
-      {'word': 'PREPOSITION', 'clue': 'Palabra que muestra relación entre palabras (en inglés).'},
-      {'word': 'BECAUSE', 'clue': 'Conector causal común en inglés.'},
-      {'word': 'BEAUTIFUL', 'clue': 'Antónimo de ugly.'},
+      {'word': 'ADJECTIVE', 'clue': 'Palabra que describe a un sustantivo (en ingl├®s).'},
+      {'word': 'VERB', 'clue': 'Palabra que expresa una acci├│n (en ingl├®s).'},
+      {'word': 'PRONOUN', 'clue': 'Palabra que reemplaza a un sustantivo (en ingl├®s).'},
+      {'word': 'PREPOSITION', 'clue': 'Palabra que muestra relaci├│n entre palabras (en ingl├®s).'},
+      {'word': 'BECAUSE', 'clue': 'Conector causal com├║n en ingl├®s.'},
+      {'word': 'BEAUTIFUL', 'clue': 'Ant├│nimo de ugly.'},
       {'word': 'YESTERDAY', 'clue': 'Indica pasado (adverbio de tiempo).'},
       {'word': 'TOMORROW', 'clue': 'Indica futuro (adverbio de tiempo).'},
-      {'word': 'SENTENCE', 'clue': 'Conjunto de palabras con sentido completo (en inglés).'},
-      {'word': 'GRAMMAR', 'clue': 'Conjunto de reglas de una lengua (en inglés).'},
-      {'word': 'VOCABULARY', 'clue': 'Conjunto de palabras conocidas (en inglés).'},
-      {'word': 'TEACHER', 'clue': 'Persona que enseña (en inglés).'},
-      {'word': 'STUDENT', 'clue': 'Persona que aprende (en inglés).'},
-      {'word': 'LISTEN', 'clue': 'Acción de prestar atención a sonidos (en inglés).'},
-      {'word': 'SPEAK', 'clue': 'Acción de hablar (en inglés).'},
+      {'word': 'SENTENCE', 'clue': 'Conjunto de palabras con sentido completo (en ingl├®s).'},
+      {'word': 'GRAMMAR', 'clue': 'Conjunto de reglas de una lengua (en ingl├®s).'},
+      {'word': 'VOCABULARY', 'clue': 'Conjunto de palabras conocidas (en ingl├®s).'},
+      {'word': 'TEACHER', 'clue': 'Persona que ense├▒a (en ingl├®s).'},
+      {'word': 'STUDENT', 'clue': 'Persona que aprende (en ingl├®s).'},
+      {'word': 'LISTEN', 'clue': 'Acci├│n de prestar atenci├│n a sonidos (en ingl├®s).'},
+      {'word': 'SPEAK', 'clue': 'Acci├│n de hablar (en ingl├®s).'},
       {'word': 'THOUGHT', 'clue': 'Pasado de think.'},
       {'word': 'WRITTEN', 'clue': 'Participio pasado de write.'},
       {'word': 'WERE', 'clue': 'Pasado plural de be.'},
       {'word': 'THAN', 'clue': 'Comparativo: A is taller ___ B.'},
-      {'word': 'THERE', 'clue': 'Homófono de their/they’re; adverbio de lugar.'},
+      {'word': 'THERE', 'clue': 'Hom├│fono de their/theyÔÇÖre; adverbio de lugar.'},
     ];
     for (int i = 0; i < 20; i++) {
       final e = hangmanPool[rnd.nextInt(hangmanPool.length)];
@@ -984,148 +888,21 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       ));
     }
 
-    // Restaurar encabezado fijo inicial y memorama fijo, luego mezclar el resto de forma balanceada
-    _exercises.clear();
-
-    // Base principal mezclada sin minijuegos fijos
-    final base = <GrammarExercise>[
-      ...mcq,
-      ...tf,
-      ...order,
-      ...dragFill,
-    ]..shuffle(rnd);
-
-    // Tomar candidatos de minijuegos
-    final firstBalloon = balloon.isNotEmpty ? balloon.first : GrammarExercise(
-      type: GrammarType.balloonPop,
-      prompt: '[Globos] I ____ to the park every day.',
-      options: const ['go', 'goes', 'went', 'going'],
-      answer: 'go',
-      category: 'Minijuego: Globos',
-    );
-    final firstHangman = hangman.isNotEmpty ? hangman.first : GrammarExercise(
-      type: GrammarType.hangman,
-      prompt: 'Hangman: Palabra que expresa una acción (en inglés).',
-      options: const [],
-      answer: 'VERB',
-      category: 'Minijuego: Hangman',
-    );
-    final firstDuck = duckHunt.isNotEmpty ? duckHunt.first : GrammarExercise(
-      type: GrammarType.duckHunt,
-      prompt: '[DuckHunt] She ____ English on the weekends.',
-      options: const ['study', 'studies', 'studied', 'studying'],
-      answer: 'studies',
-      category: 'Minijuego: Duck Hunt',
-    );
-    final firstTyping = typingShooter.isNotEmpty ? typingShooter.first : GrammarExercise(
-      type: GrammarType.typingShooter,
-      prompt: 'Typing Shooter: escribe las palabras para destruir las naves (Ronda 1)',
-      options: const [],
-      answer: 'ROUND_1',
-      category: 'Minijuego: Typing Shooter',
-    );
-
-    // Inserciones fijas al inicio según tu orden previo
-    // Índice 0: primer elemento de base (si base está vacío, se completará con el resto)
-    if (base.isNotEmpty) {
-      _exercises.add(base.removeAt(0));
-    }
-    // Índice 1: Globos
-    _exercises.add(firstBalloon);
-    // Índice 2: Hangman
-    _exercises.add(firstHangman);
-    // Índice 3: Duck Hunt
-    _exercises.add(firstDuck);
-    // Índice 4: Typing Shooter
-    _exercises.add(firstTyping);
-
-    // Preparar memorama fijo en índice 6
-    GrammarExercise? fixedMemory;
-    if (memory.isNotEmpty) {
-      fixedMemory = memory.first;
-    }
-
-    // Resto de ejercicios disponibles (excluyendo los ya usados como primeros)
-    final used = <GrammarExercise>{firstBalloon, firstHangman, firstDuck, firstTyping};
-    final remaining = <GrammarExercise>[
-      ...base,
-      ...balloon.where((e) => !used.contains(e)),
-      ...hangman.where((e) => !used.contains(e)),
-      ...duckHunt.where((e) => !used.contains(e)),
-      ...typingShooter.where((e) => !used.contains(e)),
-      ...memory.where((e) => e != fixedMemory),
-    ];
-
-    // Mezclar el resto
-    remaining.shuffle(rnd);
-
-    // Si hay memorama fijo, insertarlo en índice 6 (o al final si no alcanza la longitud)
-    if (fixedMemory != null) {
-      final insertIndex = math.min(6, _exercises.length);
-      // Rellenar hasta índice 6 con elementos de remaining si hace falta
-      while (_exercises.length < 6 && remaining.isNotEmpty) {
-        _exercises.add(remaining.removeAt(0));
-      }
-      final idx = math.min(6, _exercises.length);
-      _exercises.insert(idx, fixedMemory);
-    }
-
-    // Añadir los restantes
-    _exercises.addAll(remaining);
-
-    // Paso de balanceo: evitar demasiados consecutivos del mismo tipo
-    for (int i = 2; i < _exercises.length - 1; i++) {
-      final prev = _exercises[i - 1].type;
-      final curr = _exercises[i].type;
-      final next = _exercises[i + 1].type;
-      // Si hay racha de 3 iguales prev-curr-next, intenta intercambiar con un siguiente distinto
-      if (prev == curr && curr == next) {
-        for (int j = i + 2; j < _exercises.length; j++) {
-          if (_exercises[j].type != curr) {
-            final tmp = _exercises[i + 1];
-            _exercises[i + 1] = _exercises[j];
-            _exercises[j] = tmp;
-            break;
-          }
-        }
-      }
-    }
+    _exercises
+      ..clear()
+      ..addAll([...mcq, ...tf, ...order, ...balloon, ...duckHunt, ...typingShooter, ...memory, ...hangman, ...dragFill]);
 
     _exercises.shuffle(rnd);
-    
-    // Insertar minijuegos al inicio en orden específico
-    _exercises.insert(1, balloon.isNotEmpty ? balloon[0] : GrammarExercise(
-      type: GrammarType.balloonPop,
-      prompt: '[Globos] I ____ to the park every day.',
-      options: ['go', 'goes', 'went', 'going'],
-      answer: 'go',
-      category: 'Minijuego: Globos',
-    ));
-    
-    _exercises.insert(2, hangman.isNotEmpty ? hangman[0] : GrammarExercise(
-      type: GrammarType.hangman,
-      prompt: 'Hangman: Palabra que expresa una acción (en inglés).',
-      options: const [],
-      answer: 'VERB',
-      category: 'Minijuego: Hangman',
-    ));
-    
-    _exercises.insert(3, duckHunt.isNotEmpty ? duckHunt[0] : GrammarExercise(
-      type: GrammarType.duckHunt,
-      prompt: '[DuckHunt] She ____ English on the weekends.',
-      options: ['study', 'studies', 'studied', 'studying'],
-      answer: 'studies',
-      category: 'Minijuego: Duck Hunt',
-    ));
-    
-    // Agregar typing shooter después (mantener su posición)
-    if (typingShooter.isNotEmpty) {
-      _exercises.insert(4, typingShooter[0]);
-    }
-    
-    // Agregar memorama 2 ejercicios después del primer typing shooter (índice 6)
-    if (memory.isNotEmpty) {
-      _exercises.insert(6, memory[0]);
+    // Forzar que el tercer ejercicio sea siempre Typing Shooter (para pruebas)
+    if (_exercises.length > 2) {
+      _exercises[2] = GrammarExercise(
+        type: GrammarType.typingShooter,
+        prompt: 'Typing Shooter: escribe las palabras para destruir las naves (Ronda de prueba)',
+        options: const [],
+        answer: 'ROUND_TEST',
+        explanation: 'Escribe las letras mostradas para destruir a los enemigos. Vence al jefe para completar la ronda.',
+        category: 'Minijuego: Typing Shooter',
+      );
     }
   }
 
@@ -1150,7 +927,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         _attempts += 1; // solo baja vida si fue incorrecto
         HapticFeedback.lightImpact();
         if (_attempts >= 2) {
-          _answered = true; // se mostrará la correcta
+          _answered = true; // se mostrar├í la correcta
         }
       }
     });
@@ -1190,7 +967,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       _balloonExerciseIndex = -1;
       _memLabels = [];
       _memPairIds = [];
-      _memMatchedCards = <int>{};
+      _memMatched = <int>{};
       _memRevealed = [];
       _memExerciseIndex = -1;
       // Reset ahorcado
@@ -1215,41 +992,6 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       _typingExerciseIndex = -1;
       _typingLaunched = false;
     });
-  }
-
-  List<Widget> _buildBalloonExplosion(Color color) {
-    final particles = <Widget>[];
-    final rnd = math.Random();
-    for (int i = 0; i < 8; i++) {
-      final angle = (i / 8) * 2 * math.pi;
-      final distance = 40.0;
-      final dx = math.cos(angle) * distance;
-      final dy = math.sin(angle) * distance;
-      
-      particles.add(
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: const Duration(milliseconds: 400),
-          builder: (context, value, child) {
-            return Transform.translate(
-              offset: Offset(dx * value, dy * value),
-              child: Opacity(
-                opacity: 1.0 - value,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    }
-    return particles;
   }
 
   @override
@@ -1613,54 +1355,39 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
                             }
                           }
                         },
-                  child: AnimatedBuilder(
-                    animation: AlwaysStoppedAnimation(_balloonHidden[i] ? 1.0 : 0.0),
-                    builder: (context, child) {
-                      final hidden = _balloonHidden[i];
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Globo original
-                          AnimatedScale(
-                            scale: (_answered && !isCorrect) ? 1.0 : (hidden ? 0.0 : 1.0),
-                            duration: const Duration(milliseconds: 180),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 84,
-                                  height: 84,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      colors: [bg.withOpacity(0.95), Colors.white.withOpacity(0.6)],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    border: Border.all(color: border, width: 2),
-                                    boxShadow: const [
-                                      BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
-                                    ],
-                                  ),
-                                  child: Text(o, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                ),
-                                const SizedBox(height: 4),
-                                Transform.rotate(
-                                  angle: 0.8,
-                                  child: Container(width: 10, height: 10, color: border),
-                                ),
-                                const SizedBox(height: 2),
-                                Container(width: 2, height: 24, color: Colors.grey[400]),
-                              ],
+                  child: AnimatedScale(
+                    scale: (_answered && !isCorrect) ? 1.0 : (_balloonHidden[i] ? 0.0 : 1.0),
+                    duration: const Duration(milliseconds: 180),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 84,
+                          height: 84,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [bg.withOpacity(0.95), Colors.white.withOpacity(0.6)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
+                            border: Border.all(color: border, width: 2),
+                            boxShadow: const [
+                              BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
+                            ],
                           ),
-                          // Partículas de explosión
-                          if (_balloonHidden[i])
-                            ..._buildBalloonExplosion(border),
-                        ],
-                      );
-                    },
+                          child: Text(o, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        const SizedBox(height: 4),
+                        Transform.rotate(
+                          angle: 0.8,
+                          child: Container(width: 10, height: 10, color: border),
+                        ),
+                        const SizedBox(height: 2),
+                        Container(width: 2, height: 24, color: Colors.grey[400]),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -1684,27 +1411,35 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       // Spawn inicial aleatorio desde cualquier lado
       final rand = math.Random(_index * 123 + n);
       for (int i = 0; i < n; i++) {
-        final side = rand.nextInt(2); // 0=left,1=right (solo horizontal para asegurar visibilidad)
+        final side = rand.nextInt(4); // 0=left,1=right,2=top,3=bottom
         final speed = 2.0 + rand.nextDouble() * 1.8;
         double x = 0, y = 0, vx = 0, vy = 0;
         const areaH = 260.0;
         final w = _duckAreaWidth;
-        const duckWidth = 96.0;
-        const labelWidth = 120.0;
-        const totalWidth = duckWidth + labelWidth;
-        
-        if (side == 0) {
-          // Desde la izquierda
-          x = -totalWidth - 20.0;
-          y = 40 + rand.nextDouble() * (areaH - 120);
-          vx = speed;
-          vy = 0;
-        } else {
-          // Desde la derecha
-          x = w + 20.0;
-          y = 40 + rand.nextDouble() * (areaH - 120);
-          vx = -speed;
-          vy = 0;
+        switch (side) {
+          case 0:
+            x = -100.0;
+            y = 20 + rand.nextDouble() * (areaH - 40);
+            vx = speed;
+            vy = (rand.nextDouble() - 0.5) * 1.2;
+            break;
+          case 1:
+            x = w + 100.0;
+            y = 20 + rand.nextDouble() * (areaH - 40);
+            vx = -speed;
+            vy = (rand.nextDouble() - 0.5) * 1.2;
+            break;
+          case 2:
+            x = 20 + rand.nextDouble() * (w - 40);
+            y = -60.0;
+            vx = (rand.nextDouble() - 0.5) * 1.2;
+            vy = speed;
+            break;
+          default:
+            x = 20 + rand.nextDouble() * (w - 40);
+            y = areaH + 60.0;
+            vx = (rand.nextDouble() - 0.5) * 1.2;
+            vy = -speed;
         }
         _duckX[i] = x;
         _duckY[i] = y;
@@ -1722,26 +1457,36 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
             if (_duckHidden[i]) continue;
             final w = _duckAreaWidth;
             const h = 260.0;
-            const duckWidth = 96.0;
-            const labelWidth = 120.0;
-            const totalWidth = duckWidth + labelWidth;
-            
             _duckX[i] += _duckVX[i];
-            
-            // Respawn cuando sale del área visible
-            if (_duckX[i] < -totalWidth - 50 || _duckX[i] > w + 50) {
+            _duckY[i] += _duckVY[i];
+            if (_duckX[i] < -140 || _duckX[i] > w + 140 || _duckY[i] < -140 || _duckY[i] > h + 140) {
               final r = math.Random(_index * 321 + i * 11);
-              final side = r.nextInt(2);
+              final side = r.nextInt(4);
               final speed = 2.0 + r.nextDouble() * 1.8;
-              
-              if (side == 0) {
-                _duckX[i] = -totalWidth - 20.0;
-                _duckY[i] = 40 + r.nextDouble() * (h - 120);
-                _duckVX[i] = speed;
-              } else {
-                _duckX[i] = w + 20.0;
-                _duckY[i] = 40 + r.nextDouble() * (h - 120);
-                _duckVX[i] = -speed;
+              switch (side) {
+                case 0:
+                  _duckX[i] = -100.0;
+                  _duckY[i] = 20 + r.nextDouble() * (h - 40);
+                  _duckVX[i] = speed;
+                  _duckVY[i] = (r.nextDouble() - 0.5) * 1.2;
+                  break;
+                case 1:
+                  _duckX[i] = w + 100.0;
+                  _duckY[i] = 20 + r.nextDouble() * (h - 40);
+                  _duckVX[i] = -speed;
+                  _duckVY[i] = (r.nextDouble() - 0.5) * 1.2;
+                  break;
+                case 2:
+                  _duckX[i] = 20 + r.nextDouble() * (w - 40);
+                  _duckY[i] = -60.0;
+                  _duckVX[i] = (r.nextDouble() - 0.5) * 1.2;
+                  _duckVY[i] = speed;
+                  break;
+                default:
+                  _duckX[i] = 20 + r.nextDouble() * (w - 40);
+                  _duckY[i] = h + 60.0;
+                  _duckVX[i] = (r.nextDouble() - 0.5) * 1.2;
+                  _duckVY[i] = -speed;
               }
             }
           }
@@ -1756,15 +1501,8 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           _duckAreaWidth = constraints.maxWidth;
-          return Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/fondo_duck.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(
-              children: List.generate(ex.options.length, (i) {
+          return Stack(
+            children: List.generate(ex.options.length, (i) {
               final o = ex.options[i];
               final isCorrect = o == ex.answer;
               final hidden = i < _duckHidden.length && _duckHidden[i];
@@ -1814,7 +1552,6 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
                 ),
               );
             }),
-            ),
           );
         },
       ),
@@ -1832,9 +1569,6 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
           fit: BoxFit.contain,
         ),
       );
-      // Amarillo pastel con borde gris oscuro
-      final Color chipBg = const Color(0xFFFFF3C4);
-      final Color chipBorder = Colors.grey[700]!;
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1843,14 +1577,14 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: chipBg,
+              color: fill,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: chipBorder, width: 2),
+              border: Border.all(color: border, width: 2),
               boxShadow: const [
                 BoxShadow(color: AppColors.shadow, blurRadius: 6, offset: Offset(0, 3)),
               ],
             ),
-            child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+            child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       );
@@ -1892,20 +1626,19 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       _memExerciseIndex = _index;
       _memLabels = [];
       _memPairIds = [];
-      _memMatchedCards = <int>{};
+      _memMatched = <int>{};
       _memRevealed = [];
       final pairs = (ex.answer as Map<String, String>);
       final entries = pairs.entries.toList();
       final items = <Map<String, dynamic>>[];
-      // Crear lista de items con parId por pareja (no por carta) para emparejar por ID
       for (var i = 0; i < entries.length; i++) {
-        items.add({'label': entries[i].key, 'pairId': i});     // sujeto
-        items.add({'label': entries[i].value, 'pairId': i});   // to be
+        items.add({'label': entries[i].key, 'id': i});
+        items.add({'label': entries[i].value, 'id': i});
       }
       items.shuffle(math.Random(_index));
       for (final it in items) {
         _memLabels.add(it['label'] as String);
-        _memPairIds.add(it['pairId'] as int);
+        _memPairIds.add(it['id'] as int);
       }
     }
 
@@ -1920,78 +1653,57 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       ),
       itemCount: _memLabels.length,
       itemBuilder: (context, i) {
-        final isMatched = _memMatchedCards.contains(i);
-        final isRevealed = isMatched || _memRevealed.contains(i) || _answered;
+        final pairId = _memPairIds[i];
+        final isMatched = _memMatched.contains(pairId);
+        final isRevealed = isMatched || _memRevealed.contains(i) || (_answered && _isCorrect);
         return GestureDetector(
           onTap: () {
             if (_answered) return;
-            if (isMatched) return; // No se puede tocar cartas ya emparejadas
-            if (_memRevealed.contains(i)) return; // No se puede tocar la misma carta dos veces
-            
+            if (isMatched || _memRevealed.contains(i)) return;
             setState(() {
               _memRevealed.add(i);
             });
-            
             if (_memRevealed.length == 2) {
-              final currentRound = ++_memRoundId; // snapshot para delayed
               final a = _memRevealed[0];
               final b = _memRevealed[1];
-
-              // Match por parId (sujeto <-> to be) evitando ambigüedades
               if (_memPairIds[a] == _memPairIds[b] && a != b) {
-                // ACIERTO: las dos cartas quedan emparejadas en verde
                 setState(() {
-                  _memMatchedCards.add(a);
-                  _memMatchedCards.add(b);
+                  _memMatched.add(_memPairIds[a]);
                   _memRevealed.clear();
-                  final totalCards = _memLabels.length;
-                  // Si se emparejaron todas las cartas, el ejercicio es correcto
-                  if (_memMatchedCards.length == totalCards) {
-                    _isCorrect = true;
-                    _answered = true;
-                  }
+                  _isCorrect = true;
+                  _answered = true;
                 });
               } else {
-                // FALLO: baja una vida, se muestran un instante y se vuelven a tapar
-                _attempts += 1;
-                HapticFeedback.lightImpact();
-                
-                // Delay para que se vean las cartas incorrectas un instante
-                Future.delayed(const Duration(milliseconds: 800), () {
+                Future.delayed(const Duration(milliseconds: 600), () {
                   if (!mounted) return;
-                  // Protección: ignorar si cambió de round o ya se completó correctamente
-                  if (currentRound != _memRoundId || _isCorrect) return;
-                  
                   setState(() {
                     _memRevealed.clear();
-                    // Si se gastaron las 2 vidas, marcar como incorrecto
-                    if (_attempts >= 2) {
-                      _answered = true;
-                      _isCorrect = false;
-                    }
+                    _attempts += 1;
                   });
+                  HapticFeedback.lightImpact();
+                  if (_attempts >= 2) {
+                    if (mounted) {
+                      setState(() {
+                        _answered = true;
+                      });
+                    }
+                  }
                 });
               }
             }
           },
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
-              color: isMatched ? Colors.green[100] : (isRevealed ? Colors.amber[100] : Colors.blueGrey[100]),
+              color: isRevealed ? Colors.amber[100] : Colors.blueGrey[100],
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isMatched ? Colors.green : Colors.grey[400]!,
-                width: isMatched ? 2 : 1,
-              ),
+              border: Border.all(color: isMatched ? Colors.green : Colors.grey[400]!),
             ),
             alignment: Alignment.center,
             child: Text(
-              _memLabels[i],
+              isRevealed ? _memLabels[i] : '?',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isRevealed || isMatched ? Colors.black87 : Colors.transparent,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         );
@@ -2033,7 +1745,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         _hangUsed.add(l);
         if (word.contains(l)) {
           _hangGuessed.add(l);
-          // ¿se completó?
+          // ┬┐se complet├│?
           final allRevealed = word
               .split('')
               .where((c) => RegExp(r'[A-Z]').hasMatch(c))
@@ -2335,22 +2047,22 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
     String hintFor(GrammarExercise ex) {
       switch (ex.type) {
         case GrammarType.multipleChoice:
-          return 'Revisa el tiempo verbal según el contexto (p. ej., adverbios como "yesterday", "right now", "tomorrow").';
+          return 'Revisa el tiempo verbal seg├║n el contexto (p. ej., adverbios como "yesterday", "right now", "tomorrow").';
         case GrammarType.trueFalse:
-          return 'Verifica auxiliares y concordancia sujeto–verbo; cuida la forma negativa y preguntas.';
+          return 'Verifica auxiliares y concordancia sujetoÔÇôverbo; cuida la forma negativa y preguntas.';
         case GrammarType.orderWords:
-          return 'Sigue el orden Sujeto–Verbo–Complemento y la posición natural de adverbios.';
+          return 'Sigue el orden SujetoÔÇôVerboÔÇôComplemento y la posici├│n natural de adverbios.';
         case GrammarType.dragFill:
-          return 'Fíjate en preposiciones de tiempo/lugar y la forma verbal correcta.';
+          return 'F├¡jate en preposiciones de tiempo/lugar y la forma verbal correcta.';
         case GrammarType.balloonPop:
         case GrammarType.duckHunt:
           return 'Elige la forma verbal acorde al tiempo indicado por el contexto.';
         case GrammarType.memoryPairs:
-          return 'Relaciona cada sujeto con su forma correcta del verbo “to be”.';
+          return 'Relaciona cada sujeto con su forma correcta del verbo ÔÇ£to beÔÇØ.';
         case GrammarType.hangman:
-          return 'Usa la pista para deducir la palabra; revisa ortografía.';
+          return 'Usa la pista para deducir la palabra; revisa ortograf├¡a.';
         case GrammarType.typingShooter:
-          return 'Escribe con precisión las letras mostradas.';
+          return 'Escribe con precisi├│n las letras mostradas.';
       }
     }
 
@@ -2375,9 +2087,9 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('¡Correcto!', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text('┬íCorrecto!', style: TextStyle(fontWeight: FontWeight.bold)),
                 if (!_isCorrect) ...[
-                  // Si es incorrecto, sustituimos mensajes genéricos por orientación específica
+                  // Si es incorrecto, sustituimos mensajes gen├®ricos por orientaci├│n espec├¡fica
                   const SizedBox(height: 2),
                   Text(hintFor(ex)),
                   if (isTwoAttemptsWrong)
@@ -2412,7 +2124,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
       children: [
         Text(
           _answered
-              ? (_isCorrect ? '¡Bien hecho!' : 'La respuesta correcta se ha mostrado')
+              ? (_isCorrect ? '┬íBien hecho!' : 'La respuesta correcta se ha mostrado')
               : 'Intentos: $_attempts/2',
           style: TextStyle(color: Colors.grey[700]),
         ),

@@ -22,6 +22,7 @@ dependencies:
   
   # Permissions
   permission_handler: ^11.0.1
+  shared_preferences: ^2.2.3
   
   # State management (opcional)
   provider: ^6.0.5

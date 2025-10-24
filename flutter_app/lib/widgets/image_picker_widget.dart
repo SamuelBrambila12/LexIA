@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../utils/constants.dart';
+import '../services/permissions_service.dart';
 
 class ImagePickerWidget extends StatelessWidget {
   final Function(File) onImageSelected;
@@ -16,16 +17,17 @@ class ImagePickerWidget extends StatelessWidget {
 
   Future<void> _selectImage(BuildContext context, ImageSource source) async {
     try {
-      // Solicitar permisos
+      // Solicitar permisos solo la primera vez y recordar
+      bool allowed = true;
       if (source == ImageSource.camera) {
-        final cameraStatus = await Permission.camera.request();
-        if (cameraStatus.isDenied) {
+        allowed = await PermissionsService.checkAndRequestCameraOnce();
+        if (!allowed) {
           _showPermissionDialog(context, 'cámara');
           return;
         }
       } else {
-        final storageStatus = await Permission.photos.request();
-        if (storageStatus.isDenied) {
+        allowed = await PermissionsService.checkAndRequestGalleryOnce();
+        if (!allowed) {
           _showPermissionDialog(context, 'galería');
           return;
         }

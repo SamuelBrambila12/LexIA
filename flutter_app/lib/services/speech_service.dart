@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'permissions_service.dart';
 
 class SpeechService {
   static final SpeechService _instance = SpeechService._internal();
@@ -80,6 +81,12 @@ class SpeechService {
       if (!initialized) {
         return false;
       }
+    }
+
+    // Verificar/solicitar micrófono una sola vez
+    final micOk = await PermissionsService.checkAndRequestMicrophoneOnce();
+    if (!micOk) {
+      return false;
     }
 
     try {

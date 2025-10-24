@@ -134,13 +134,19 @@ class _TypingShooterScreenState extends State<TypingShooterScreen> with SingleTi
       final item = _spawnQueue.removeAt(0);
       final bool isBoss = (item['isBoss'] as bool);
       final String word = (item['word'] as String);
-      final double x = 40 + _rnd.nextDouble() * (_w - 80);
+      // Calcular ancho de columna según palabra y tamaño de nave para evitar recortes en bordes
+      final tempEnemy = _Enemy(pos: const Offset(0, 0), word: word, speed: 0, isBoss: isBoss);
+      final colW = _enemyColumnWidth(tempEnemy);
+      final double minX = 0;
+      final double maxX = math.max(0, _w - colW);
+      final double x = minX + _rnd.nextDouble() * (maxX - minX);
+      final double clampedX = x.clamp(0, _w - colW);
       final double y = -50.0 - _rnd.nextDouble() * 200;
       final double base = 0.25 + 0.08 * (_wave - 1);
       final double baseClamped = base < 0.25 ? 0.25 : (base > 1.2 ? 1.2 : base);
       final double speed = isBoss ? (baseClamped * 0.9) : (baseClamped + _rnd.nextDouble() * 0.12);
       setState(() {
-        _enemies.add(_Enemy(pos: Offset(x, y), word: word, speed: speed, isBoss: isBoss));
+        _enemies.add(_Enemy(pos: Offset(clampedX, y), word: word, speed: speed, isBoss: isBoss));
       });
     });
 
