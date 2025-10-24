@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../services/user_stats_service.dart';
-import '../english_menu_screen.dart';
+import '../language_selection_screen.dart';
 
 class LoginRegisterScreen extends StatefulWidget {
   const LoginRegisterScreen({super.key});
@@ -28,6 +28,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with SingleTi
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     AuthService().seedUserSamuel();
+    AuthService().seedAdditionalUsers();
   }
 
   @override
@@ -61,7 +62,10 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with SingleTi
     if (user != null) {
       await UserStatsService().getStats(user['email']!);
     }
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => EnglishMenuScreen()));
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LanguageSelectionScreen()),
+      (route) => false,
+    );
   }
 
   Future<void> _onRegister() async {
@@ -82,7 +86,10 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with SingleTi
       return;
     }
     await UserStatsService().getStats(email);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => EnglishMenuScreen()));
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LanguageSelectionScreen()),
+      (route) => false,
+    );
   }
 
   void _toast(String m) {
@@ -143,7 +150,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with SingleTi
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Aprende idiomas de forma interactiva',
+                    'Aprendizaje de idiomas impulsado por IA',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white70,

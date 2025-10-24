@@ -39,22 +39,35 @@ class UserStatsService {
     var level = p.getString(_kLevel(email));
 
     if (progress == null || streak == null || lessons == null || points == null || level == null) {
-      // inicializar por defecto
-      final auth = AuthService();
-      final current = await auth.currentUser();
-      final name = current != null && current['email'] == email ? current['name'] : null;
-      if (name == 'Samuel Brambila') {
-        progress = 0.62;
-        streak = 7;
-        lessons = 24;
-        points = 1240;
-        level = 'B1';
-      } else {
-        progress = 0.0;
-        streak = 0;
-        lessons = 0;
-        points = 0;
-        level = 'A1';
+      // inicializar por defecto por usuario conocido
+      switch (email) {
+        case 'samuel@lexia.local':
+          progress = 0.62;
+          streak = 7;
+          lessons = 24;
+          points = 1240;
+          level = 'B1';
+          break;
+        case 'saul@lexia.local':
+          progress = 0.35;
+          streak = 3;
+          lessons = 12;
+          points = 520;
+          level = 'A2';
+          break;
+        case 'gael@lexia.local':
+          progress = 0.81;
+          streak = 10;
+          lessons = 37;
+          points = 1980;
+          level = 'B2';
+          break;
+        default:
+          progress = 0.0;
+          streak = 0;
+          lessons = 0;
+          points = 0;
+          level = 'A1';
       }
       await saveStats(email, UserStats(progress: progress, streakDays: streak, lessons: lessons, points: points, level: level));
     }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../utils/constants.dart';
 import 'home_screen.dart';
@@ -61,56 +61,64 @@ class EnglishMenuScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.all(AppDimensions.defaultPadding),
-              padding: const EdgeInsets.all(AppDimensions.largePadding),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.secondary],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppDimensions.largeRadius),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColors.shadow,
-                    blurRadius: 12,
-                    offset: Offset(0, 6),
-                  )
-                ],
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 28,
-                    backgroundColor: Colors.white,
-                    child: Text(
-                      '🇬🇧',
-                      style: TextStyle(fontSize: 28),
+                child: Container(
+                  padding: const EdgeInsets.all(AppDimensions.largePadding),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColors.primary, AppColors.secondary],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadow,
+                        blurRadius: 12,
+                        offset: Offset(0, 6),
+                      )
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Menú de aprendizaje',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                  child: Stack(
+                    children: [
+                                            Row(
+                        children: [
+                          const CircleAvatar(
+                            radius: 28,
+                            backgroundColor: Colors.white,
+                            child: Text(
+                              '🇬🇧',
+                              style: TextStyle(fontSize: 28),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Elige una categoría para empezar a practicar',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Menú de aprendizaje',
+                                  style: theme.textTheme.headlineMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Elige una categoría para empezar a practicar',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -363,16 +371,6 @@ class _UserProfileSheetState extends State<_UserProfileSheet> {
                         icon: const Icon(Icons.logout_rounded),
                         label: const Text('Cerrar sesión'),
                       ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Función de ejemplo')),
-                          );
-                        },
-                        icon: const Icon(Icons.emoji_events_rounded),
-                        label: const Text('Ver logros (demo)'),
-                      ),
                     ],
                   ),
                 ),
@@ -557,6 +555,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
 
   // Estado para minijuego: globos
   List<bool> _balloonHidden = [];
+  List<bool> _balloonExploding = []; // Para rastrear si está en proceso de explosión
   List<Offset> _balloonPositions = [];
   int _balloonExerciseIndex = -1;
 
@@ -567,6 +566,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
   List<int> _memRevealed = [];
   int _memExerciseIndex = -1;
   int _memRoundId = 0; // Para invalidar callbacks atrasados
+  int _memMaxLives = 4; // Vidas para memorama
 
   // Estado para minijuego: ahorcado
   Set<String> _hangGuessed = <String>{};
@@ -1219,28 +1219,50 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
 
   List<Widget> _buildBalloonExplosion(Color color) {
     final particles = <Widget>[];
-    final rnd = math.Random();
-    for (int i = 0; i < 8; i++) {
-      final angle = (i / 8) * 2 * math.pi;
-      final distance = 40.0;
+    final rnd = math.Random(42); // Seed fijo para consistencia
+    
+    // Generar 16 partículas en lugar de 8
+    for (int i = 0; i < 16; i++) {
+      final angle = (i / 16) * 2 * math.pi;
+      final distance = 50.0 + rnd.nextDouble() * 20.0; // Distancia variable
       final dx = math.cos(angle) * distance;
       final dy = math.sin(angle) * distance;
+      
+      // Tamaño variable de partículas
+      final size = 4.0 + rnd.nextDouble() * 8.0;
+      
+      // Rotación aleatoria
+      final rotation = rnd.nextDouble() * 2 * math.pi;
       
       particles.add(
         TweenAnimationBuilder<double>(
           tween: Tween(begin: 0.0, end: 1.0),
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 500),
           builder: (context, value, child) {
+            // Easing: comienza rápido, termina lento
+            final easeValue = value < 0.5 
+              ? 2 * value * value 
+              : -1 + (4 - 2 * value) * value;
+            
             return Transform.translate(
-              offset: Offset(dx * value, dy * value),
-              child: Opacity(
-                opacity: 1.0 - value,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color,
+              offset: Offset(dx * easeValue, dy * easeValue),
+              child: Transform.rotate(
+                angle: rotation * easeValue,
+                child: Opacity(
+                  opacity: (1.0 - value).clamp(0.0, 1.0),
+                  child: Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color.withOpacity(0.8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withOpacity(0.4),
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1249,6 +1271,34 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         ),
       );
     }
+    
+    // Agregar onda de choque (círculo expandible)
+    particles.add(
+      TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: const Duration(milliseconds: 400),
+        builder: (context, value, child) {
+          return Transform.scale(
+            scale: value * 2.5,
+            child: Opacity(
+              opacity: (1.0 - value) * 0.6,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: color,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    
     return particles;
   }
 
@@ -1345,6 +1395,25 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
             }),
           ),
         ],
+      );
+    }
+
+    // Para memorama: mostrar 4 corazones
+    if (ex.type == GrammarType.memoryPairs) {
+      final remaining = (_answered && !_isCorrect) ? 0 : (_memMaxLives - _attempts).clamp(0, _memMaxLives);
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        transitionBuilder: (child, anim) => ScaleTransition(scale: anim, child: child),
+        child: Row(
+          key: ValueKey('hearts-mem-$remaining'),
+          children: List.generate(_memMaxLives, (i) {
+            final filled = i < remaining;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: Icon(Icons.favorite, color: filled ? Colors.redAccent : Colors.grey, size: 18),
+            );
+          }),
+        ),
       );
     }
 
@@ -1545,6 +1614,7 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
     if (_balloonExerciseIndex != _index) {
       _balloonExerciseIndex = _index;
       _balloonHidden = List<bool>.filled(ex.options.length, false);
+      _balloonExploding = List<bool>.filled(ex.options.length, false);
     }
 
     return SizedBox(
@@ -1613,54 +1683,48 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
                             }
                           }
                         },
-                  child: AnimatedBuilder(
-                    animation: AlwaysStoppedAnimation(_balloonHidden[i] ? 1.0 : 0.0),
-                    builder: (context, child) {
-                      final hidden = _balloonHidden[i];
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Globo original
-                          AnimatedScale(
-                            scale: (_answered && !isCorrect) ? 1.0 : (hidden ? 0.0 : 1.0),
-                            duration: const Duration(milliseconds: 180),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 84,
-                                  height: 84,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      colors: [bg.withOpacity(0.95), Colors.white.withOpacity(0.6)],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    border: Border.all(color: border, width: 2),
-                                    boxShadow: const [
-                                      BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
-                                    ],
-                                  ),
-                                  child: Text(o, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Partículas de explosión - mostrar cuando está explotando (no cuando está oculto)
+                      if (_balloonExploding[i] && !isCorrect)
+                        ..._buildBalloonExplosion(border),
+                      // Globo original - desaparece después de la explosión, reaparece al terminar
+                      AnimatedScale(
+                        scale: (_balloonHidden[i] && !_answered ? 0.0 : 1.0),
+                        duration: const Duration(milliseconds: 300),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 84,
+                              height: 84,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: [bg.withOpacity(0.95), Colors.white.withOpacity(0.6)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
-                                const SizedBox(height: 4),
-                                Transform.rotate(
-                                  angle: 0.8,
-                                  child: Container(width: 10, height: 10, color: border),
-                                ),
-                                const SizedBox(height: 2),
-                                Container(width: 2, height: 24, color: Colors.grey[400]),
-                              ],
+                                border: Border.all(color: border, width: 2),
+                                boxShadow: const [
+                                  BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4)),
+                                ],
+                              ),
+                              child: Text(o, style: const TextStyle(fontWeight: FontWeight.bold)),
                             ),
-                          ),
-                          // Partículas de explosión
-                          if (_balloonHidden[i])
-                            ..._buildBalloonExplosion(border),
-                        ],
-                      );
-                    },
+                            const SizedBox(height: 4),
+                            Transform.rotate(
+                              angle: 0.8,
+                              child: Container(width: 10, height: 10, color: border),
+                            ),
+                            const SizedBox(height: 2),
+                            Container(width: 2, height: 24, color: Colors.grey[400]),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -1964,8 +2028,8 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
                   
                   setState(() {
                     _memRevealed.clear();
-                    // Si se gastaron las 2 vidas, marcar como incorrecto
-                    if (_attempts >= 2) {
+                    // Si se gastaron las vidas, marcar como incorrecto
+                    if (_attempts >= _memMaxLives) {
                       _answered = true;
                       _isCorrect = false;
                     }
@@ -1974,25 +2038,59 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
               }
             }
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-              color: isMatched ? Colors.green[100] : (isRevealed ? Colors.amber[100] : Colors.blueGrey[100]),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isMatched ? Colors.green : Colors.grey[400]!,
-                width: isMatched ? 2 : 1,
-              ),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              _memLabels[i],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isRevealed || isMatched ? Colors.black87 : Colors.transparent,
-              ),
-            ),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: isRevealed ? 1.0 : 0.0),
+            duration: const Duration(milliseconds: 400),
+            builder: (context, value, child) {
+              final angle = value * math.pi;
+              final isBack = angle > math.pi / 2;
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Fondo que rota
+                  Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(angle),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isBack
+                            ? (isMatched ? Colors.green[100] : Colors.amber[100])
+                            : Colors.blueGrey[100],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isBack
+                              ? (isMatched ? Colors.green : Colors.grey[400]!)
+                              : Colors.grey[400]!,
+                          width: isBack && isMatched ? 2 : 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Texto sin rotación
+                  if (isBack)
+                    Text(
+                      _memLabels[i],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    )
+                  else
+                    const Text(
+                      '?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color: Colors.grey,
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -2346,7 +2444,32 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
         case GrammarType.duckHunt:
           return 'Elige la forma verbal acorde al tiempo indicado por el contexto.';
         case GrammarType.memoryPairs:
-          return 'Relaciona cada sujeto con su forma correcta del verbo “to be”.';
+            // RetroalimentaciÃ³n especÃ­fica segÃºn el contenido del memorama
+            final answer = ex.answer as Map<String, String>;
+            final firstKey = answer.keys.first;
+            final firstValue = answer.values.first;
+            
+            // Detectar tipo de memorama por contenido
+            if (firstKey == 'I' || firstKey == 'You' || firstKey == 'He' || firstKey == 'She') {
+              return 'Empareja pronombres con sus formas correctas del verbo "to be".';
+            } else if (firstValue.contains('Mexican') || firstValue.contains('Spanish') || firstValue.contains('Japanese')) {
+              return 'Empareja paÃ­ses con sus gentilicios en inglÃ©s.';
+            } else if (firstValue.contains('Rojo') || firstValue.contains('Azul') || firstValue.contains('Verde')) {
+              return 'Empareja colores en inglÃ©s con sus traducciones al espaÃ±ol.';
+            } else if (firstValue.contains('Perro') || firstValue.contains('Gato') || firstValue.contains('PÃ¡jaro')) {
+              return 'Empareja animales en inglÃ©s con sus traducciones al espaÃ±ol.';
+            } else if (firstValue.contains('Maestro') || firstValue.contains('Doctor') || firstValue.contains('Ingeniero')) {
+              return 'Empareja profesiones en inglÃ©s con sus traducciones al espaÃ±ol.';
+            } else if (firstValue.contains('Small') || firstValue.contains('Cold') || firstValue.contains('Slow')) {
+              return 'Empareja palabras con sus antÃ³nimos en inglÃ©s.';
+            } else if (firstValue.contains('Went') || firstValue.contains('Ate') || firstValue.contains('Saw')) {
+              return 'Empareja verbos con sus formas en pasado simple.';
+            } else if (firstValue.contains('Goes') || firstValue.contains('Studies') || firstValue.contains('Does')) {
+              return 'Empareja verbos con sus formas en tercera persona del singular.';
+            } else if (firstValue.contains('Surface') || firstValue.contains('Inside') || firstValue.contains('Point')) {
+              return 'Empareja preposiciones con sus usos correctos.';
+            }
+            return 'Encuentra los pares correspondientes.';
         case GrammarType.hangman:
           return 'Usa la pista para deducir la palabra; revisa ortografía.';
         case GrammarType.typingShooter:
@@ -2407,6 +2530,31 @@ class _GrammarExerciseScreenState extends State<GrammarExerciseScreen> {
 
   Widget _buildFooter(GrammarExercise ex) {
     final enabledNext = _answered || (_attempts >= 2);
+    
+    // Para memorama: mostrar intentos sobre 4
+    if (ex.type == GrammarType.memoryPairs) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            _answered
+                ? (_isCorrect ? '¡Bien hecho!' : 'La respuesta correcta se ha mostrado')
+                : 'Intentos: $_attempts/$_memMaxLives',
+            style: TextStyle(color: Colors.grey[700]),
+          ),
+          FilledButton.icon(
+            onPressed: enabledNext ? _next : null,
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFF66BB6A),
+              foregroundColor: Colors.white,
+            ),
+            icon: const Icon(Icons.arrow_forward_rounded),
+            label: const Text('Siguiente'),
+          ),
+        ],
+      );
+    }
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

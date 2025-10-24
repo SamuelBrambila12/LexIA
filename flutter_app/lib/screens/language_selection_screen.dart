@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import '../utils/constants.dart';
 import 'english_menu_screen.dart';
+import '../widgets/animated_top_circles.dart';
 
 class LanguageSelectionScreen extends StatelessWidget {
   const LanguageSelectionScreen({super.key});
@@ -38,20 +40,27 @@ class LanguageSelectionScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: -80,
-            right: -60,
-            child: _Blob(color: Colors.white.withOpacity(0.08), size: 220),
-          ),
-          Positioned(
+          // Blob animado inferior izquierda
+          const Positioned(
             bottom: -60,
             left: -40,
-            child: _Blob(color: Colors.white.withOpacity(0.06), size: 180),
+            child: _AnimatedBlobStatic(color: Colors.white, opacity: 0.06, size: 180),
+          ),
+
+          // Círculos animados en el área azul superior
+          const Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedTopCircles(
+                primaryColor: Color(0xFF1976D2),
+                secondaryColor: Color(0xFF42A5F5),
+              ),
+            ),
           ),
 
           SafeArea(
             child: Column(
               children: [
+                // Contenido del título sin Stack (solo Row)
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
@@ -240,6 +249,104 @@ class _LanguageTile extends StatelessWidget {
             onTap: onTap,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AnimatedBlob extends StatefulWidget {
+  final Color color;
+  final double opacity;
+  final double size;
+
+  const _AnimatedBlob({
+    required this.color,
+    required this.opacity,
+    required this.size,
+  });
+
+  @override
+  State<_AnimatedBlob> createState() => _AnimatedBlobState();
+}
+
+class _AnimatedBlobState extends State<_AnimatedBlob>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 14),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        
+        return AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            // Movimiento horizontal de derecha a izquierda
+            // Comienza en la derecha (screenWidth + 100) y va hacia la izquierda (-220)
+            final offsetX = screenWidth + 100 - (_controller.value * (screenWidth + 320));
+            
+            // Movimiento vertical muy sutil
+            final offsetY = 10 * math.sin(_controller.value * math.pi * 2);
+            
+            // Escala respiratoria muy sutil
+            final scale = 0.95 + 0.08 * math.sin(_controller.value * math.pi * 2);
+
+            return Transform.translate(
+              offset: Offset(offsetX, offsetY),
+              child: Transform.scale(
+                scale: scale,
+                child: Container(
+                  width: widget.size,
+                  height: widget.size,
+                  decoration: BoxDecoration(
+                    color: widget.color.withOpacity(widget.opacity),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _AnimatedBlobStatic extends StatelessWidget {
+  final Color color;
+  final double opacity;
+  final double size;
+
+  const _AnimatedBlobStatic({
+    required this.color,
+    required this.opacity,
+    required this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color.withOpacity(opacity),
+        shape: BoxShape.circle,
       ),
     );
   }

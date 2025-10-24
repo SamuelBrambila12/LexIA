@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import '../services/auth_service.dart';
 import 'language_selection_screen.dart';
+import 'auth/login_register_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,10 +35,12 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void _navigateNext() {
+  Future<void> _navigateNext() async {
     if (!mounted) return;
+    final loggedIn = await AuthService().isLoggedIn();
+    final next = loggedIn ? const LanguageSelectionScreen() : const LoginRegisterScreen();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const LanguageSelectionScreen()),
+      MaterialPageRoute(builder: (_) => next),
     );
   }
 

@@ -28,6 +28,26 @@ class AuthService {
     }
   }
 
+  Future<void> seedAdditionalUsers() async {
+    final p = await _prefs;
+
+    const saulEmail = 'saul@lexia.local';
+    const saulName = 'Saul V Nuño';
+    const saulPassword = 'saulvnuno';
+    if (p.getString(_nameKey(saulEmail)) == null) {
+      await p.setString(_nameKey(saulEmail), saulName);
+      await p.setString(_passwordKey(saulEmail), saulPassword);
+    }
+
+    const gaelEmail = 'gael@lexia.local';
+    const gaelName = 'Gael';
+    const gaelPassword = 'gaeler12';
+    if (p.getString(_nameKey(gaelEmail)) == null) {
+      await p.setString(_nameKey(gaelEmail), gaelName);
+      await p.setString(_passwordKey(gaelEmail), gaelPassword);
+    }
+  }
+
   Future<bool> register({required String name, required String email, required String password}) async {
     final p = await _prefs;
     if (p.getString(_nameKey(email)) != null) {
